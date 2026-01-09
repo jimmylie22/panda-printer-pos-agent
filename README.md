@@ -1,159 +1,399 @@
-<img src=".erb/img/erb-banner.svg" width="100%" />
+# Panda Printer POS Agent
 
-<br>
+Aplikasi desktop untuk menghubungkan dan mengontrol printer thermal USB untuk sistem Point of Sale (POS). Agent ini berjalan sebagai layanan background di komputer Anda dan memungkinkan aplikasi web mengirim perintah cetak ke printer thermal struk melalui HTTP API.
 
-<p>
-  Electron React Boilerplate uses <a href="https://electron.atom.io/">Electron</a>, <a href="https://facebook.github.io/react/">React</a>, <a href="https://github.com/reactjs/react-router">React Router</a>, <a href="https://webpack.js.org/">Webpack</a> and <a href="https://www.npmjs.com/package/react-refresh">React Fast Refresh</a>.
-</p>
+## Apa itu aplikasi ini?
 
-<br>
+Ini adalah **aplikasi desktop** yang bertindak sebagai jembatan antara aplikasi web POS Anda dengan printer thermal USB. Aplikasi ini:
+- Mendeteksi printer thermal USB yang terhubung ke komputer Anda
+- Menyediakan antarmuka sederhana untuk memilih dan mengkonfigurasi printer
+- Menjalankan web server lokal (API) yang menerima perintah cetak
+- Memformat dan mengirim perintah cetak ke printer thermal Anda
+- Mendukung berbagai perintah cetak (teks, perataan, tabel, QR code, barcode, dll.)
 
-<div align="center">
+## Fitur
 
-[![Build Status][github-actions-status]][github-actions-url]
-[![Github Tag][github-tag-image]][github-tag-url]
-[![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/Fjy3vfgy5q)
+- ✅ Dukungan printer thermal USB
+- ✅ Deteksi otomatis printer yang terhubung
+- ✅ HTTP REST API untuk cetak jarak jauh
+- ✅ Integrasi system tray
+- ✅ Fungsi update otomatis
+- ✅ Cross-platform (macOS, Windows, Linux)
+- ✅ Cetak struk, tiket, label, dan lainnya
+- ✅ Dukungan QR code dan barcode
+- ✅ Format tabel kustom
 
-[![OpenCollective](https://opencollective.com/electron-react-boilerplate-594/backers/badge.svg)](#backers)
-[![OpenCollective](https://opencollective.com/electron-react-boilerplate-594/sponsors/badge.svg)](#sponsors)
-[![StackOverflow][stackoverflow-img]][stackoverflow-url]
+---
 
-</div>
+## Persyaratan (Yang Anda Butuhkan Terlebih Dahulu)
 
-## Install
+### 1. Install Node.js
 
-Clone the repo and install dependencies:
+Node.js diperlukan untuk menjalankan aplikasi ini. Jangan khawatir jika Anda belum pernah menggunakannya sebelumnya!
+
+#### Untuk macOS:
+1. Kunjungi [https://nodejs.org/](https://nodejs.org/)
+2. Download **versi LTS** (direkomendasikan untuk kebanyakan pengguna)
+3. Buka file `.pkg` yang sudah diunduh dan ikuti panduan instalasi
+4. Verifikasi instalasi dengan membuka **Terminal** dan ketik:
+   ```bash
+   node --version
+   npm --version
+   ```
+   Anda seharusnya melihat nomor versi yang ditampilkan
+
+#### Untuk Windows:
+1. Kunjungi [https://nodejs.org/](https://nodejs.org/)
+2. Download **versi LTS** (Windows Installer)
+3. Jalankan installer `.msi` dan ikuti panduan setup
+4. Verifikasi instalasi dengan membuka **Command Prompt** dan ketik:
+   ```cmd
+   node --version
+   npm --version
+   ```
+   Anda seharusnya melihat nomor versi yang ditampilkan
+
+#### Untuk Linux (Ubuntu/Debian):
+```bash
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+Verifikasi instalasi:
+```bash
+node --version
+npm --version
+```
+
+### 2. Install Git (Opsional tetapi Direkomendasikan)
+
+Git membantu Anda mengunduh dan mengelola kode proyek.
+
+#### Untuk macOS:
+```bash
+# Install Homebrew terlebih dahulu jika Anda belum memilikinya
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Kemudian install Git
+brew install git
+```
+
+#### Untuk Windows:
+1. Download dari [https://git-scm.com/download/win](https://git-scm.com/download/win)
+2. Jalankan installer dan ikuti panduan setup
+
+#### Untuk Linux:
+```bash
+sudo apt-get install git
+```
+
+---
+
+## Langkah Instalasi
+
+### Langkah 1: Unduh Proyek
+
+#### Opsi A: Menggunakan Git (Direkomendasikan)
+Buka terminal/command prompt Anda dan jalankan:
 
 ```bash
-git clone --depth 1 --branch main https://github.com/electron-react-boilerplate/electron-react-boilerplate.git your-project-name
-cd your-project-name
+# Navigasi ke lokasi dimana Anda ingin menyimpan proyek
+cd ~/Documents  # macOS/Linux
+# ATAU
+cd C:\Users\YourUsername\Documents  # Windows
+
+# Clone proyek
+git clone https://github.com/yourusername/panda-printer-pos-agent.git
+
+# Masuk ke folder proyek
+cd panda-printer-pos-agent
+```
+
+#### Opsi B: Download ZIP
+1. Buka halaman repository GitHub
+2. Klik tombol hijau "Code"
+3. Klik "Download ZIP"
+4. Ekstrak file ZIP ke lokasi yang Anda inginkan
+5. Buka terminal/command prompt dan navigasi ke folder tersebut
+
+### Langkah 2: Install Dependensi
+
+Langkah ini mengunduh semua library dan tools yang dibutuhkan untuk menjalankan aplikasi.
+
+```bash
+# Pastikan Anda berada di folder proyek
+# Kemudian jalankan:
 npm install
 ```
 
-**Having issues installing? See our [debugging guide](https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues/400)**
+Proses ini mungkin memakan waktu 5-15 menit tergantung koneksi internet Anda. Anda akan melihat banyak teks bergulir - itu normal!
 
-## Starting Development
+**Masalah Umum:**
+- Jika Anda melihat error tentang permissions di macOS/Linux, coba: `sudo npm install`
+- Jika instalasi gagal, coba hapus folder `node_modules` dan file `package-lock.json`, kemudian jalankan `npm install` lagi
 
-Start the app in the `dev` environment:
+### Langkah 3: Hubungkan Printer USB Anda
+
+1. Colokkan printer thermal USB Anda ke komputer
+2. Pastikan printer dalam keadaan menyala
+3. Install driver printer jika diperlukan oleh produsen
+
+---
+
+## Menjalankan Aplikasi
+
+### Mode Development (Untuk Testing)
 
 ```bash
 npm start
 ```
 
-## Packaging for Production
+Ini akan:
+1. Membuka jendela aplikasi
+2. Menjalankan web server pada port 3800 (default)
+3. Memungkinkan Anda melihat informasi debug
 
-To package apps for the local platform:
+### Production Build (Untuk Penggunaan Harian)
 
 ```bash
 npm run package
 ```
 
-## Docs
+Ini akan membuat file aplikasi standalone:
+- **macOS**: Lihat di folder `release/build/mac/` untuk file `.dmg`
+- **Windows**: Lihat di folder `release/build/win/` untuk installer `.exe`
+- **Linux**: Lihat di folder `release/build/linux/` untuk package
 
-See our [docs and guides here](https://electron-react-boilerplate.js.org/docs/installation)
+Double-click installer untuk menginstall aplikasi di sistem Anda.
 
-## Community
+---
 
-Join our Discord: https://discord.gg/Fjy3vfgy5q
+## Menggunakan Aplikasi
 
-## Sponsors
+### 1. Pilih Printer Anda
 
-<a href="https://palette.dev">
-  <img src=".erb/img/palette-sponsor-banner.svg" width="100%" />
-</a>
+1. Jalankan aplikasi
+2. Anda akan melihat daftar printer USB yang terdeteksi
+3. Klik pada printer Anda untuk memilihnya
+4. Pilihan akan tersimpan secara otomatis
 
-## Donations
+### 2. Menggunakan HTTP API
 
-**Donations will ensure the following:**
+Setelah aplikasi berjalan, ia akan menjalankan web server di `http://localhost:3800`
 
-- 🔨 Long term maintenance of the project
-- 🛣 Progress on the [roadmap](https://electron-react-boilerplate.js.org/docs/roadmap)
-- 🐛 Quick responses to bug reports and help requests
+#### Endpoint: POST `/print`
 
-## Backers
+Kirim perintah cetak sebagai JSON:
 
-Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/electron-react-boilerplate-594#backer)]
+```javascript
+// Contoh menggunakan JavaScript fetch
+fetch('http://localhost:3800/print', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify([
+    { CMD: 'ALIGN', ARGS: 'CT' },
+    { CMD: 'STYLE', ARGS: 'B' },
+    { CMD: 'TEXT', ARGS: 'WELCOME TO OUR STORE\n' },
+    { CMD: 'STYLE', ARGS: 'NORMAL' },
+    { CMD: 'TEXT', ARGS: '------------------------\n' },
+    { CMD: 'FEED', ARGS: 2 }
+  ])
+})
+```
 
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/0/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/0/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/1/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/1/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/2/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/2/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/3/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/3/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/4/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/4/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/5/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/5/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/6/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/6/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/7/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/7/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/8/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/8/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/9/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/9/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/10/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/10/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/11/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/11/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/12/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/12/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/13/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/13/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/14/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/14/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/15/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/15/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/16/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/16/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/17/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/17/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/18/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/18/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/19/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/19/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/20/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/20/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/21/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/21/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/22/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/22/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/23/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/23/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/24/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/24/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/25/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/25/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/26/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/26/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/27/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/27/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/28/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/28/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/backer/29/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/backer/29/avatar.svg"></a>
+#### Perintah yang Tersedia:
 
-## Sponsors
+| Perintah | Deskripsi | Contoh Args |
+|---------|-------------|--------------|
+| `TEXT` | Cetak teks | `"Hello World\n"` |
+| `ALIGN` | Atur perataan | `"CT"` (tengah), `"LT"` (kiri), `"RT"` (kanan) |
+| `FEED` | Umpan kertas | `2` (jumlah baris) |
+| `FONT` | Atur font | `"A"`, `"B"`, `"C"` |
+| `STYLE` | Gaya teks | `"B"` (tebal), `"U"` (garis bawah), `"NORMAL"` |
+| `LINE_SPACE` | Spasi baris | `50` (piksel) |
+| `TABLE` | Cetak tabel | `[{text: "Item", align: "LEFT", width: 0.5}, ...]` |
+| `QRCODE` | Cetak QR code | `{data: "https://example.com", size: 6}` |
+| `BARCODE` | Cetak barcode | `{data: "123456789", type: "EAN13"}` |
+| `IMAGE` | Cetak gambar | Data gambar terenkode Base64 |
+| `CUT` | Potong kertas | (tidak perlu args) |
 
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/electron-react-boilerplate-594-594#sponsor)]
+#### Contoh: Cetak Struk
 
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/0/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/1/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/2/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/3/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/4/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/5/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/6/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/7/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/8/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/9/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/9/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/10/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/10/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/11/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/11/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/12/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/12/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/13/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/13/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/14/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/14/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/15/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/15/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/16/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/16/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/17/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/17/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/18/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/18/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/19/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/19/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/20/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/20/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/21/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/21/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/22/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/22/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/23/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/23/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/24/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/24/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/25/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/25/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/26/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/26/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/27/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/27/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/28/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/28/avatar.svg"></a>
-<a href="https://opencollective.com/electron-react-boilerplate-594/sponsor/29/website" target="_blank"><img src="https://opencollective.com/electron-react-boilerplate-594/sponsor/29/avatar.svg"></a>
+```javascript
+const receipt = [
+  { CMD: 'ALIGN', ARGS: 'CT' },
+  { CMD: 'STYLE', ARGS: 'B' },
+  { CMD: 'TEXT', ARGS: 'MY STORE\n' },
+  { CMD: 'STYLE', ARGS: 'NORMAL' },
+  { CMD: 'TEXT', ARGS: '123 Main Street\n' },
+  { CMD: 'TEXT', ARGS: 'Phone: 555-1234\n' },
+  { CMD: 'TEXT', ARGS: '================================\n' },
+  { CMD: 'ALIGN', ARGS: 'LT' },
+  { 
+    CMD: 'TABLE', 
+    ARGS: [
+      [
+        { text: 'Item', align: 'LEFT', width: 0.6 },
+        { text: 'Qty', align: 'CENTER', width: 0.2 },
+        { text: 'Price', align: 'RIGHT', width: 0.2 }
+      ],
+      [
+        { text: 'Coffee', align: 'LEFT', width: 0.6 },
+        { text: '2', align: 'CENTER', width: 0.2 },
+        { text: '$6.00', align: 'RIGHT', width: 0.2 }
+      ]
+    ]
+  },
+  { CMD: 'TEXT', ARGS: '================================\n' },
+  { CMD: 'ALIGN', ARGS: 'RT' },
+  { CMD: 'TEXT', ARGS: 'Total: $6.00\n' },
+  { CMD: 'ALIGN', ARGS: 'CT' },
+  { CMD: 'TEXT', ARGS: 'Thank you!\n' },
+  { CMD: 'FEED', ARGS: 3 },
+  { CMD: 'CUT', ARGS: null }
+];
 
-## Maintainers
+fetch('http://localhost:3800/print', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(receipt)
+});
+```
 
-- [Amila Welihinda](https://github.com/amilajack)
-- [John Tran](https://github.com/jooohhn)
-- [C. T. Lin](https://github.com/chentsulin)
-- [Jhen-Jie Hong](https://github.com/jhen0409)
+---
 
-## License
+## Troubleshooting
 
-MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplate)
+### Printer Tidak Terdeteksi
+- Pastikan printer dalam keadaan menyala dan terhubung via USB
+- Coba cabut dan colokkan kembali printer
+- Restart aplikasi
+- Periksa apakah driver printer sudah terinstall
 
-[github-actions-status]: https://github.com/electron-react-boilerplate/electron-react-boilerplate/workflows/Test/badge.svg
-[github-actions-url]: https://github.com/electron-react-boilerplate/electron-react-boilerplate/actions
-[github-tag-image]: https://img.shields.io/github/tag/electron-react-boilerplate/electron-react-boilerplate.svg?label=version
-[github-tag-url]: https://github.com/electron-react-boilerplate/electron-react-boilerplate/releases/latest
-[stackoverflow-img]: https://img.shields.io/badge/stackoverflow-electron_react_boilerplate-blue.svg
-[stackoverflow-url]: https://stackoverflow.com/questions/tagged/electron-react-boilerplate
+### Port Sudah Digunakan
+Jika port 3800 sudah digunakan, Anda bisa mengubahnya di source code:
+- Edit file `src/main/main.ts`
+- Cari `const PORT = 3800`
+- Ubah ke nomor port yang berbeda
+
+### Aplikasi Tidak Mau Dijalankan
+- Pastikan Node.js terinstall dengan benar
+- Coba hapus folder `node_modules` dan jalankan `npm install` lagi
+- Periksa output console untuk pesan error
+
+### Masalah Permission (Linux)
+Anda mungkin perlu menambahkan user Anda ke grup `lp` dan `dialout`:
+```bash
+sudo usermod -a -G lp,dialout $USER
+```
+Kemudian log out dan log in kembali.
+
+---
+
+## Struktur Proyek
+
+```
+panda-printer-pos-agent/
+├── src/
+│   ├── main/          # Electron main process (backend)
+│   │   ├── main.ts    # Titik masuk aplikasi
+│   │   ├── menu.ts    # Menu aplikasi
+│   │   └── proto/     # Protocol buffers
+│   ├── renderer/      # React UI (frontend)
+│   │   ├── App.tsx    # Komponen React utama
+│   │   └── index.tsx  # Titik masuk React
+│   └── types/         # Definisi tipe TypeScript
+├── assets/            # Ikon dan resource
+├── release/           # Aplikasi yang sudah di-build
+└── package.json       # Dependensi proyek dan script
+```
+
+---
+
+## Development
+
+### Script yang Tersedia
+
+```bash
+# Mulai mode development
+npm start
+
+# Build untuk production
+npm run build
+
+# Package untuk distribusi
+npm run package
+
+# Jalankan test
+npm test
+
+# Lint code
+npm run lint
+```
+
+### Tech Stack
+
+- **Electron** - Desktop application framework
+- **React** - UI library
+- **TypeScript** - Programming language
+- **Express** - HTTP server
+- **@node-escpos** - Thermal printer library
+- **Webpack** - Module bundler
+- **TailwindCSS** - CSS framework
+
+---
+
+## Build untuk Distribusi
+
+### macOS
+```bash
+npm run package
+```
+Membuat installer `.dmg` di folder `release/build/mac/`
+
+### Windows
+```bash
+npm run package
+```
+Membuat installer `.exe` di folder `release/build/win/`
+
+### Linux
+```bash
+npm run package
+```
+Membuat package di folder `release/build/linux/`
+
+---
+
+## Catatan Keamanan API
+
+Secara default, HTTP API hanya menerima koneksi dari localhost. Jika Anda perlu menerima koneksi dari perangkat lain di jaringan Anda, pastikan untuk mengimplementasikan autentikasi yang tepat dan gunakan HTTPS.
+
+---
+
+## Kontribusi
+
+Kontribusi sangat diterima! Silakan submit Pull Request.
+
+---
+
+## Lisensi
+
+Proyek ini dilisensikan di bawah MIT License - lihat file [LICENSE](LICENSE) untuk detail.
+
+---
+
+## Dukungan
+
+Jika Anda mengalami masalah:
+1. Periksa bagian [Troubleshooting](#troubleshooting)
+2. Tinjau issue GitHub yang ada
+3. Buat issue baru dengan detail tentang masalah Anda
+
+---
+
+## Changelog
+
+Lihat [CHANGELOG.md](CHANGELOG.md) untuk riwayat versi dan update.
