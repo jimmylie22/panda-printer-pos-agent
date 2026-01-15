@@ -21,6 +21,8 @@ import {
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { Image } from '@node-escpos/core';
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {
   Alignment,
@@ -103,12 +105,12 @@ ipcMain.on('set-selected-usb-device', async (event, device) => {
 });
 
 function doUsbPrint(arg) {
-  if (!arg) return;
+  if (!arg) return;  
   const cachedSelectedUsb = store.get('selected-usb-device');
   if (cachedSelectedUsb === undefined) {
     throw new Error('No Device Selected');
   }
-
+  console.log('PRINT PAYLOAD:', arg);
   const device = new USB(
     cachedSelectedUsb?.deviceDescriptor?.idVendor,
     cachedSelectedUsb.deviceDescriptor.idProduct,
@@ -118,11 +120,15 @@ function doUsbPrint(arg) {
   device.open(async function (err) {
     if (err) {
       // handle error
+      console.error('USB OPEN ERROR:', err);
       return;
     }
+    console.log('USB OPEN OK');
 
     // encoding is optional
-    const options = { encoding: 'GB18030' /* default */ };
+    // const options = { encoding: 'GB18030' /* default */ };
+    const options = { encoding: 'CP437' /* default */ };
+    
     const printer = new Printer(device, options);
 
     // eslint-disable-next-line no-restricted-syntax
@@ -150,6 +156,12 @@ function doUsbPrint(arg) {
         case 'TABLE':
           printer.tableCustom(ARGS as CustomTableItem[]);
           break;
+        case 'IMAGE':
+          await printer.image(
+            await Image.load(getAssetPath(ARGS)), // ARGS = path image
+              'd24' // mode ESC/POS (paling kompatibel)
+            );
+            break;
         default:
           break;
       }
@@ -162,6 +174,7 @@ function doUsbPrint(arg) {
 
 ipcMain.on('usb-do-print', async (event, arg: UsbPrinterParameter[]) => {
   try {
+    console.log("PANGGIL doUsbPrint");
     doUsbPrint(arg);
   } catch (error: any) {
     event.reply('usb-do-print', error?.message || 'Failed to print');
@@ -268,6 +281,8 @@ expressApp.use(express.json());
 expressApp.post('/', (req, res) => {
   try {
     const { payload } = req.body || {};
+    console.log('URL DIPANGGIL : ',payload);
+    
     doUsbPrint(payload);
     return res.json({
       success: true,
