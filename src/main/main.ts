@@ -278,7 +278,7 @@ function createTray() {
 
 expressApp.use(cors());
 expressApp.use(express.json());
-expressApp.post('/', (req, res) => {
+expressApp.post('/print', (req, res) => {
   try {
     const { payload } = req.body || {};
     console.log('URL DIPANGGIL : ',payload);
